@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pesan WhatsApp Otomatis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #25D366;
+            --primary-dark: #128C7E;
+            --light-color: #ffffff;
+            --dark-color: #333333;
+            --gray-color: #f5f5f5;
+            --border-color: #e0e0e0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--gray-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        header {
+            background-color: var(--light-color);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-right: 8px;
+        }
+        
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+        
+        .tagline {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            padding: 0 10px;
+        }
+        
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .list-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 14px;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .contact-list {
+            max-height: 350px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 8px;
+        }
+        
+        .contact-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s;
+        }
+        
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+        
+        .contact-item:hover {
+            background-color: var(--gray-color);
+        }
+        
+        .contact-info {
+            flex: 1;
+        }
+        
+        .contact-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
+        
+        .contact-number {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .contact-status {
+            font-size: 11px;
+            padding: 3px 6px;
+            border-radius: 20px;
+            margin-right: 8px;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-sent {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .contact-actions {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            justify-content: flex-end; /* ensure actions sit at the right */
+            min-width: 140px; /* give actions a minimum width so they don't wrap too early */
+        }
+        
+        .btn-small {
+            padding: 5px 8px;
+            font-size: 12px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 15px 0;
+            color: #666;
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 20px;
+        }
+        
+        .empty-list {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+        }
+        
+        .empty-list i {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #ddd;
+        }
+        
+        .empty-list p {
+            font-size: 14px;
+        }
+
+        .warning-box {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffe08a;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.2;
+            text-align: justify;
+        }
+        
+        /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            .warning-box {
+                font-size: 12px;
+                margin-top: -8px;
+            }
+            .container {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 12px 0;
+                margin-bottom: 15px;
+            }
+            
+            .logo i {
+                font-size: 24px;
+            }
+            
+            .logo h1 {
+                font-size: 18px;
+            }
+            
+            .tagline {
+                font-size: 13px;
+            }
+            
+            .app-container {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .form-section, .list-section {
+                padding: 15px;
+            }
+            
+            .section-title {
+                font-size: 16px;
+                margin-bottom: 12px;
+            }
+            
+            .form-group {
+                margin-bottom: 12px;
+            }
+            
+            input, textarea {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+            
+            textarea {
+                min-height: 90px;
+            }
+            
+            .btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            
+            .contact-list {
+                max-height: 300px;
+                padding: 6px;
+            }
+            
+            .contact-item {
+                padding: 8px 10px;
+            }
+            
+            .contact-name {
+                font-size: 13px;
+            }
+            
+            .contact-number {
+                font-size: 11px;
+            }
+            
+            .contact-status {
+                font-size: 10px;
+                padding: 2px 5px;
+                margin-right: 5px;
+            }
+            
+            .btn-small {
+                padding: 4px 6px;
+                font-size: 11px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 6px;
+                margin-top: 12px;
+            }
+            
+            .empty-list {
+                padding: 15px;
+            }
+            
+            .empty-list i {
+                font-size: 35px;
+            }
+            
+            .empty-list p {
+                font-size: 13px;
+            }
+            
+            footer {
+                padding: 12px 0;
+                font-size: 11px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+            
+            .form-section, .list-section {
+                padding: 12px;
+            }
+            
+            .logo h1 {
+                font-size: 16px;
+            }
+            
+            .tagline {
+                font-size: 12px;
+            }
+            
+            .section-title {
+                font-size: 15px;
+            }
+            
+            /* Keep contact action buttons on one line and right-aligned on small screens */
+            .contact-actions {
+                flex-direction: row; /* force horizontal layout */
+                gap: 6px; /* small gap between buttons */
+                align-items: center;
+                justify-content: flex-end; /* align to right */
+                white-space: nowrap; /* prevent the buttons from wrapping */
+            }
+
+            .contact-item {
+                /* allow the contact-info to shrink so actions have space */
+                gap: 8px;
+            }
+
+            .contact-info {
+                min-width: 0; /* allow flex child to shrink inside flex container */
+                overflow: hidden;
+            }
+
+            /* Allow long names/numbers to wrap to the next line instead of
+               forcing the action buttons to move or expanding the layout. */
+            .contact-name, .contact-number {
+                text-overflow: unset;
+                overflow: visible;
+                white-space: normal; /* allow wrapping */
+                word-break: break-word; /* break long words */
+                overflow-wrap: anywhere; /* modern fallback */
+                display: block;
+                margin-bottom: 2px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fab fa-whatsapp"></i>
+                <h1>WhatsApp Broadcast System</h1>
+            </div>
+            <p class="tagline">Kirim pesan otomatis ke beberapa kontak yang tidak tersimpan di perangkat</p>
+        </header>
+        
+        <div class="app-container">
+            <div class="form-section">
+                <h2 class="section-title">Pesan & Kontak</h2>
+                
+                <div class="form-group">
+                    <label for="message">Pesan yang akan dikirim:</label>
+                    <textarea id="message" placeholder="Tulis pesan Anda di sini..."></textarea>
+                </div>
+                <div class="warning-box">
+                    <strong>Catatan:</strong> Browser tidak dapat melampirkan gambar secara otomatis ke WhatsApp. Anda perlu melampirkannya atau menempelkannya secara manual setelah jendela WhatsApp terbuka.
+                </div>
+                
+                <div class="form-group">
+                    <label for="contactName">Nama Kontak:</label>
+                    <input type="text" id="contactName" placeholder="Masukkan nama kontak">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contactNumber">Nomor WhatsApp:</label>
+                    <input type="text" id="contactNumber" placeholder="Contoh: 628123456789">
+                </div>
+                
+                <button id="addContact" class="btn btn-block">Tambah ke Daftar</button>
+            </div>
+            
+            <div class="list-section">
+                <h2 class="section-title">Daftar Kontak</h2>
+                
+                <div class="contact-list" id="contactList">
+                    <div class="empty-list">
+                        <i class="fas fa-users"></i>
+                        <p>Belum ada kontak yang ditambahkan</p>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="clearAll" class="btn btn-secondary btn-block">Hapus Semua Kontak</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="footer-inner">
+                <div class="footer-left">&copy; 2025 Muhammad Raffi Zahrandhika</div>
+                <div class="footer-right">built with
+                    <span class="brand"><i class="fas fa-search"></i><span class="brand-name"> DeepSeek</span></span>
+                    <span class="brand"><i class="fas fa-code"></i><span class="brand-name"> VSCode</span></span>
+                    <span class="brand"><i class="fab fa-github"></i><span class="brand-name"> GitHub</span></span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elemen DOM
+            const messageInput = document.getElementById('message');
+            const contactNameInput = document.getElementById('contactName');
+            const contactNumberInput = document.getElementById('contactNumber');
+            const addContactBtn = document.getElementById('addContact');
+            const contactList = document.getElementById('contactList');
+            // sendAll button removed - no global reference
+            const clearAllBtn = document.getElementById('clearAll');
+            
+            // Data kontak (persisted to localStorage)
+            function loadContacts() {
+                try {
+                    const raw = localStorage.getItem('wb_contacts');
+                    if (!raw) return [];
+                    const parsed = JSON.parse(raw);
+                    return Array.isArray(parsed) ? parsed : [];
+                } catch (e) {
+                    console.warn('Failed to load contacts from localStorage', e);
+                    return [];
+                }
+            }
+
+            function saveContacts() {
+                try {
+                    localStorage.setItem('wb_contacts', JSON.stringify(contacts));
+                } catch (e) {
+                    console.warn('Failed to save contacts to localStorage', e);
+                }
+            }
+
+            let contacts = loadContacts();
+            // render contacts loaded from storage on initial page load
+            renderContactList();
+            
+            // Fungsi untuk menambahkan kontak ke daftar
+            function addContact() {
+                const name = contactNameInput.value.trim();
+                const number = contactNumberInput.value.trim();
+                const message = messageInput.value.trim();
+                
+                // Validasi input
+                if (!name || !number || !message) {
+                    alert('Harap isi semua field!');
+                    return;
+                }
+                
+                // Validasi nomor
+                if (!isValidPhoneNumber(number)) {
+                    alert('Format nomor tidak valid! Gunakan format: 628123456789');
+                    return;
+                }
+                
+                // Tambahkan kontak ke array
+                const contact = {
+                    id: Date.now(),
+                    name: name,
+                    number: number,
+                    status: 'pending' // pending, sent
+                };
+                
+                contacts.push(contact);
+                // persist contacts
+                saveContacts();
+                
+                // Reset input nama dan nomor
+                contactNameInput.value = '';
+                contactNumberInput.value = '';
+                
+                // Render ulang daftar kontak
+                renderContactList();
+            }
+            
+            // Fungsi untuk validasi nomor telepon
+            function isValidPhoneNumber(number) {
+                // Format: 62xxxxxxxxxx (tanpa +)
+                const phoneRegex = /^62\d{9,12}$/;
+                return phoneRegex.test(number);
+            }
+            
+            // Fungsi untuk merender daftar kontak
+            function renderContactList() {
+                if (contacts.length === 0) {
+                    contactList.innerHTML = `
+                        <div class="empty-list">
+                            <i class="fas fa-users"></i>
+                            <p>Belum ada kontak yang ditambahkan</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                contacts.forEach(contact => {
+                    html += `
+                        <div class="contact-item" data-id="${contact.id}">
+                            <div class="contact-info">
+                                <div class="contact-name">${contact.name}</div>
+                                <div class="contact-number">${contact.number}</div>
+                            </div>
+                            <div class="contact-actions">
+                                <span class="contact-status status-${contact.status}">
+                                    ${contact.status === 'pending' ? 'Menunggu' : 'Terkirim'}
+                                </span>
+                                <button class="btn btn-small send-single" data-id="${contact.id}">
+                                    <i class="fab fa-whatsapp"></i> Kirim
+                                </button>
+                                <button class="btn btn-secondary btn-small remove-contact" data-id="${contact.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                contactList.innerHTML = html;
+                
+                // Tambahkan event listener untuk tombol hapus
+                document.querySelectorAll('.remove-contact').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        removeContact(id);
+                    });
+                });
+                
+                // Tambahkan event listener untuk tombol kirim per kontak
+                document.querySelectorAll('.send-single').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        sendSingleMessage(id);
+                    });
+                });
+            }
+            
+            // Fungsi untuk menghapus kontak
+            function removeContact(id) {
+                contacts = contacts.filter(contact => contact.id !== id);
+                saveContacts();
+                renderContactList();
+            }
+            
+            // Fungsi untuk mengirim pesan ke satu kontak
+            function sendSingleMessage(id) {
+                const contact = contacts.find(c => c.id === id);
+                if (!contact) return;
+                
+                const message = messageInput.value.trim();
+                if (!message) {
+                    alert('Pesan tidak boleh kosong!');
+                    return;
+                }
+                
+                // Encode pesan untuk URL
+                const encodedMessage = encodeURIComponent(message);
+                
+                // Format nomor untuk WhatsApp
+                const formattedNumber = contact.number.replace(/^0/, '62');
+                
+                // Buat URL WhatsApp
+                const whatsappUrl = `https://wa.me/${formattedNumber}?text=${encodedMessage}`;
+                
+                // Buka WhatsApp di tab baru
+                window.open(whatsappUrl, '_blank');
+                
+                // Update status kontak
+                contact.status = 'sent';
+
+                // persist and render
+                saveContacts();
+                renderContactList();
+            }
+            
+            
+            // Fungsi untuk menghapus semua kontak
+            function clearAllContacts() {
+                if (contacts.length === 0) {
+                    alert('Tidak ada kontak yang akan dihapus!');
+                    return;
+                }
+                
+                const confirmed = confirm(`Anda akan menghapus ${contacts.length} kontak. Lanjutkan?`);
+                
+                if (confirmed) {
+                    contacts = [];
+                    saveContacts();
+                    renderContactList();
+                }
+            }
+            
+            // Event Listeners
+            addContactBtn.addEventListener('click', addContact);
+            // sendAll removed
+            clearAllBtn.addEventListener('click', clearAllContacts);
+            
+            // Tambahkan kontak dengan Enter
+            contactNameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addContact();
+                }
+            });
+            
+            contactNumberInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addContact();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

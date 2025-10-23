@@ -278,6 +278,35 @@
             line-height: 1.2;
             text-align: justify;
         }
+
+        /* Top moving banner */
+        .top-banner {
+            width: 100%;
+            background: linear-gradient(90deg, rgba(37,211,102,0.08), rgba(0,0,0,0.03));
+            border: 1px solid rgba(0,0,0,0.06);
+            padding: 6px 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            border-radius: 6px;
+        }
+
+        .top-banner-inner {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 20s linear infinite;
+            font-size: 13px;
+            color: #2b7a44;
+        }
+
+        .top-banner:hover .top-banner-inner,
+        .top-banner:focus-within .top-banner-inner {
+            animation-play-state: paused; /* pause on hover or focus for accessibility */
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
         
         /* Mobile-specific adjustments */
         @media (max-width: 768px) {
@@ -447,6 +476,9 @@
 </head>
 <body>
     <div class="container">
+            <div class="top-banner" role="status" aria-live="polite">
+                <div class="top-banner-inner">Disarankan gunakan HP saat mengirim emoji — beberapa desktop mungkin tidak merender emoji dengan benar.</div>
+            </div>
         <header>
             <div class="logo">
                 <i class="fab fa-whatsapp"></i>
